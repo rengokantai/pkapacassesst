@@ -27,6 +27,51 @@ APPLY BATCH;
 BEGIN UNLOGGED BATCH
 APPLY BATCH;
 ```
+#####Chapter 4. Read and Write
+######Tracing Cassandra queries
+```
+CREATE TABLE users ( userid text, address text, PRIMARY KEY(userid));
+TRACING ON;
+INSERT INTO users (userid, address ) VALUES ( 'ke', 'add');
+```
+#####Chapter 5. Cassandra Client
+######Connecting to a Cassandra cluster
+```
+private void connect(){
+ Cluster cluster = Clluster.builder().addContactPoint("127.0.0.1").build();
+ session=cluster.connect();
+}
+```
+
+
+#####Chapter 6. Monitoring and Tuning
+######Monitoring a Cassandra cluster
+```
+nodetool cfstats userdb.users       #with dot
+nodetool cfhistograms userdb users   #no dot
+nodetool -h 127.0.0.1 netstats #network related imformation of a cassandra node
+nodetool -h 127.0.0.1 tpstats  #different cassandra tasks such as readstage
+```
+######Tuning Cassandra nodes
+in cassandra.yml
+```
+key_cache_save_period #defines the number of intervals after which the cached partition key will be saved
+saved_caches_directory
+```
+Tuning Bloom filters
+```
+bloom_filter_fp_chance 0=100% accurate 1.0=disable
+```
+tuning java
+```
+vim /etc/cassandra/cassandra-env.sh
+```
+edit
+```
+MAX_HEAP_SIZE
+HEAP_NEWSIZE
+```
+For most 8 core and above machines, this setting should be fine.
 #####Chapter 7. Backup and Restore
 ######Restoring data to Cassandra
 Delete the old commitlog files:
